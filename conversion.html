@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Conversion Calculator - Length</title>
+    <style>
+        .calculator { margin: 20px; font-family: Arial, sans-serif; }
+        label, select, input { margin-right: -4px; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>Unit Conversion Calculator- Length</h2>
+        
+        <input type="text" id="inputValue" placeholder="Enter value">
+
+        <select id="inputUnit">
+            <option value="foot">Foot</option>
+            <option value="inch">Inch</option>
+            <option value="meter">Meter</option>
+        </select>
+
+        <span>=</span>
+
+        <input type="text" id="outputValue" readonly>
+
+        <select id="outputUnit">
+            <option value="foot">Foot</option>
+            <option value="inch">Inch</option>
+            <option value="meter">Meter</option>
+        </select>
+
+        <button onclick="convertLength()">Convert</button>
+    </div>
+
+    <script>
+        function convertLength() {
+            // Convert input string to float
+            const inputValue = parseFloat(document.getElementById("inputValue").value);
+            const inputUnit = document.getElementById("inputUnit").value;
+            const outputUnit = document.getElementById("outputUnit").value;
+            let outputValue;
+
+            // Check for invalid input
+            if (isNaN(inputValue)) {
+                alert("Please enter a valid number for the input value.");
+                return;
+            }
+
+            // Convert input to meters first
+            let valueInMeters;
+            switch (inputUnit) {
+                case "foot":
+                    valueInMeters = inputValue * 0.3048;
+                    break;
+                case "inch":
+                    valueInMeters = inputValue * 0.0254;
+                    break;
+                case "meter":
+                    valueInMeters = inputValue;
+                    break;
+                default:
+                    valueInMeters = 0;
+            }
+
+            // Convert from meters to the output unit
+            switch (outputUnit) {
+                case "foot":
+                    outputValue = valueInMeters / 0.3048;
+                    break;
+                case "inch":
+                    outputValue = valueInMeters / 0.0254;
+                    break;
+                case "meter":
+                    outputValue = valueInMeters;
+                    break;
+                default:
+                    outputValue = 0;
+            }
+
+            document.getElementById("outputValue").value = outputValue.toFixed(4);
+        }
+    </script>
+</body>
+</html>
