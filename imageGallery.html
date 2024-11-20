@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #gallery-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .image-container {
+            position: relative;
+            display: none;
+            text-align: center;
+        }
+
+        .image-container img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            border-radius: 0;
+        }
+
+        .image-container p {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+
+        .nav-arrow {
+            position: fixed;
+            top: 0;
+            width: 35%;
+            height: 100%;
+            font-size: 2rem;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0);
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease, background-color 0.3s ease;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-left {
+            left: 0;
+        }
+
+        .nav-right {
+            right: 0;
+        }
+
+        body.mouse-on-left .nav-left,
+        body.mouse-on-right .nav-right {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .nav-dot {
+            width: 15px;
+            height: 15px;
+            margin: 5px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background-color: #333;
+        }
+
+        .nav-dot:hover {
+            opacity: 1;
+        }
+    </style>          
+</head>
+<body>
+    <div id="gallery-container">
+        <div class="image-container" style="display: block;">
+            <img src="img/pic1.jpg" alt="Tiger">
+            <p>A photo of a tiger.</p>
+        </div>
+        <div class="image-container">
+            <img src="img/pic2.jpg" alt="Wolf">
+            <p>A photo of a wolf.</p>
+        </div>
+        <div class="image-container">
+            <img src="img/pic3.jpg" alt="Raccoon">
+            <p>A photo of a raccoon.</p>
+        </div>
+        <div class="image-container">
+            <img src="img/pic4.jpg" alt="Black Panther">
+            <p>A photo of a black panther.</p>
+        </div>
+        <div class="image-container">
+            <img src="img/pic5.jpg" alt="Red Panda">
+            <p>A photo of a red panda.</p>
+        </div>
+
+        <button class="nav-arrow nav-left">&lt;</button>
+        <button class="nav-arrow nav-right">&gt;</button>
+
+        <div class="nav-dots">
+            <span class="nav-dot active" data-index="0"></span>
+            <span class="nav-dot" data-index="1"></span>
+            <span class="nav-dot" data-index="2"></span>
+            <span class="nav-dot" data-index="3"></span>
+            <span class="nav-dot" data-index="4"></span>
+        </div>
+    </div>
+
+    <script>
+        const images = document.querySelectorAll('.image-container');
+        const leftArrow = document.querySelector('.nav-left');
+        const rightArrow = document.querySelector('.nav-right');
+        const dots = document.querySelectorAll('.nav-dot');
+        let currentIndex = 0;
+
+        function showImage(index) {
+            images.forEach(img => img.style.display = 'none');
+            dots.forEach(dot => dot.classList.remove('active'));
+            images[index].style.display = 'block';
+            dots[index].classList.add('active');
+        }
+
+        function navigateLeft() {
+            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+            showImage(currentIndex);
+        }
+
+        function navigateRight() {
+            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+            showImage(currentIndex);
+        }
+
+        function navigateToDot(event) {
+            currentIndex = parseInt(event.target.dataset.index);
+            showImage(currentIndex);
+        }
+
+        leftArrow.addEventListener('click', navigateLeft);
+        rightArrow.addEventListener('click', navigateRight);
+        dots.forEach(dot => dot.addEventListener('click', navigateToDot));
+
+        document.addEventListener("mousemove", (e) => {
+            const screenWidth = window.innerWidth;
+
+            if (e.clientX < screenWidth * 0.35) {
+                leftArrow.style.opacity = "1";
+                leftArrow.style.pointerEvents = "auto";
+            } else {
+                leftArrow.style.opacity = "0";
+                leftArrow.style.pointerEvents = "none";
+            }
+
+            if (e.clientX > screenWidth * 0.65) {
+                rightArrow.style.opacity = "1";
+                rightArrow.style.pointerEvents = "auto";
+            } else {
+                rightArrow.style.opacity = "0";
+                rightArrow.style.pointerEvents = "none";
+            }
+        });
+    </script>
+</body>
+</html>
